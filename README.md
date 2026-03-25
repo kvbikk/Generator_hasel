@@ -17,9 +17,10 @@ Komenda:
 ```bash
 py -m pytest
 ```
+![Zdjęcie testów](zdjecia.zdjecie_testu.png)
 
 ## Struktura folderów
--src/generator.py: Kod generatora Python.
--tests/test_generator.py: Skrypt testowy.
--requiremenets.txt: Lista zależności projektowych.
--gitignore: Ignorowanie niepotrzebnych plików na Github
+-**src/generator.py:** Kod generatora Python.
+-**tests/test_generator.py:** Skrypt testowy.
+-**requiremenets.txt:** Lista zależności projektowych.
+-**gitignore:** Ignorowanie niepotrzebnych plików na Github
