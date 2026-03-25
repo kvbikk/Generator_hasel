@@ -2,22 +2,25 @@ import random
 import string
 
 
-def generator_hasel(dlugosc_hasla=10):
-    znaki = string.ascii_letters + string.digits + string.punctuation
+def generator_hasel(dlugosc_hasla=10, uzyj_cyfr=True, uzyj_specjalnych=True):
+    znaki = string.ascii_letters
+    if uzyj_cyfr:
+        znaki += string.digits
+    if uzyj_specjalnych:
+        znaki += string.punctuation
+
     haslo = ""
     for i in range(dlugosc_hasla):
-        losowe_znaki = random.choice(znaki)
-        haslo += losowe_znaki
+        losowy_znak = random.choice((znaki))
+        haslo += losowy_znak
     return haslo
 
-moja_dlugosc = None
+moja_dlugosc = 15
 
 if moja_dlugosc is None:
     nowe_haslo = generator_hasel()
-    wyswietl_dlugosc = 10
 else:
     nowe_haslo = generator_hasel(dlugosc_hasla=moja_dlugosc)
-    wyswietl_dlugosc = moja_dlugosc
 
-print(f"Hasło składa się z: {wyswietl_dlugosc} znaków")
+print(f"Hasło składa się z: {len(nowe_haslo)} znaków")
 print(f"Twoje nowe hasło to: {nowe_haslo}")
