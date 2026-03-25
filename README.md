@@ -5,7 +5,7 @@ Aplikacja umożliwia generowanie losowych haseł o określonej długości i zło
 ## Funkcje generatora:
 - Regulacja długości hasła (parametr dlugosc_hasla)
 - Możliwość włączenia i wyłączenia cyfr (parametr uzyj_cyfr)
-- Możliwość włączenia i wyłączenia znaków specjalnych (parametr uzy_specjalnych)
+- Możliwość włączenia i wyłączenia znaków specjalnych (parametr uzyj_specjalnych)
 
 ## Wymagania
 Do poprawnego działania testów jest zainstalowana biblioteka pytest.
