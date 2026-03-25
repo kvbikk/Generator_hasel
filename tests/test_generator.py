@@ -11,13 +11,13 @@ def test_dlugosc_zadana(): #dlugosc == moja_dlugosc, zmieniamy tu i w pliku gene
     haslo = generator_hasel(dlugosc_hasla=dlugosc)
     assert len(haslo) == dlugosc
  
-def test_czy_zawiera_tylko_litery():
+def test_czy_zawiera_tylko_litery(): #Przy zmianie na True, wywala błąd
     haslo = generator_hasel(dlugosc_hasla=10, uzyj_cyfr=False, uzyj_specjalnych=False)
     for i in haslo:
         assert i in string.ascii_letters
         print(haslo)
 
-def test_czy_sie_nie_powtarza():
+def test_czy_sie_nie_powtarza(): #generuje 2 hasła i sprawdza czy się różnią
     haslo1 = generator_hasel()
     haslo2 = generator_hasel()
     assert haslo1 != haslo2
