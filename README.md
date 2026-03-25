@@ -17,7 +17,7 @@ Komenda:
 ```bash
 py -m pytest
 ```
-![Zdjęcie testów](zdjecia.zdjecie_testu.png)
+![Zdjęcie testów](zdjecia/zdjecie_testu.png)
 
 ## Struktura folderów
 -**src/generator.py:** Kod generatora Python.
