@@ -37,7 +37,7 @@ Projekt został w pełni zautomatyzowany i przeniesiony do środowiska Docker.
 * **GitHub Actions:** Każdy `push` automatycznie uruchamia proces:
     - **Linting** (flake8) - sprawdzanie czystości kodu.
     - **Testy jednostkowe** (pytest) - weryfikacja logiki.
-    - **Docker* - budowanie obrazu i wysyłka na Docker Hub.
+    - **Docker** - budowanie obrazu i wysyłka na Docker Hub.
     - **Testowe uruchomienie generatora** - pokazowe wygenerowanie hasła w logach GitHuba.
 
 ### Uruchomienie przez Docker:
