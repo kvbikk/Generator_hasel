@@ -43,5 +43,6 @@ Projekt został w pełni zautomatyzowany i przeniesiony do środowiska Docker.
 ### Uruchomienie przez Docker:
 Obraz znajduje się na Docker Hub. Aby go uruchomić:
 ```bash
-docker run --rm kvbikk/password-generator
+docker run --rm kvbikk/password-generator:latest
 ```
+![Zdjęcie testu](zdjęcia/zdjęcie_Docker_run.png)
