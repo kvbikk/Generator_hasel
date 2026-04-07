@@ -1,6 +1,7 @@
 # Generator bezpiecznych haseł
 
-# Badge: ![Python CI](https://github.com/Klxdak/K2D/actions/workflows/main.yml.badge.svg)
+# Badge: 
+![Python CI](https://github.com/Klxdak/K2D/actions/workflows/main.yml.badge.svg)
 
 Aplikacja umożliwia generowanie losowych haseł o określonej długości i złożoności.
 
