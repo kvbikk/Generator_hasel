@@ -15,7 +15,9 @@ def generator_hasel(dlugosc_hasla=10, uzyj_cyfr=True, uzyj_specjalnych=True):
         haslo += losowy_znak
     return haslo
 
+
 moja_dlugosc = 15
+
 
 if moja_dlugosc is None:
     nowe_haslo = generator_hasel()
