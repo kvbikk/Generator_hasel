@@ -35,14 +35,14 @@ Projekt został w pełni zautomatyzowany i przeniesiony do środowiska Docker.
 ### Główne zmiany:
 * **Docker:** Aplikacja posiada `Dockerfile`, który buduje izolowane środowisko z Pythonem 3.12
 * **GitHub Actions:** Każdy `push` automatycznie uruchamia proces:
-    1. **Linting** (flake8) - sprawdzanie czystości kodu.
-    2. **Testy jednostkowe** (pytest) - weryfikacja logiki.
-    3. **Docker* - budowanie obrazu i wysyłka na Docker Hub.
-    4. **Testowe uruchomienie generatora** - pokazowe wygenerowanie hasła w logach GitHuba.
+    - **Linting** (flake8) - sprawdzanie czystości kodu.
+    - **Testy jednostkowe** (pytest) - weryfikacja logiki.
+    - **Docker** - budowanie obrazu i wysyłka na Docker Hub.
+    - **Testowe uruchomienie generatora** - pokazowe wygenerowanie hasła w logach GitHuba.
 
 ### Uruchomienie przez Docker:
 Obraz znajduje się na Docker Hub. Aby go uruchomić:
 ```bash
 docker run --rm kvbikk/password-generator:latest
 ```
-![Zdjęcie testu](zdjęcia/zdjęcie_Docker_run.png)
+![Zdjęcie testu](zdjecia/zdjęcie_Docker_run.png)
