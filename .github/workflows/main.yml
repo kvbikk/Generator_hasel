@@ -1,0 +1,33 @@
+name: Python CI
+
+on:
+ push:
+    branches: [ "main" ]
+ pull_request:
+    branches: [ "main" ]
+
+jobs:
+ test:
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Pobranie kodu
+          uses: actions/checkout@v4
+
+        - name: Ustawienia Pythona
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.12'
+
+        - name: 1. Instalacja zaleznosci
+          run: |
+           python -m -pip install --upgrade pip
+           pip install -r requirmenets.txt
+        
+        - name: 2. Linting (flake8)
+          run: |
+            flake8 src/ tests/ --count --max-line-length=127 --statitics
+
+        - name: 3. Testy jednostkowe (pytest)
+          run: |
+           pytest
