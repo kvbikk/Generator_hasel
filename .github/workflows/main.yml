@@ -46,3 +46,8 @@ jobs:
             context: .
             push: true
             tags: kvbikk/password-generator:latest
+            
+        - name: 6. Uruchomienie generatora (generator.py)
+          run: |
+           export PYTHONPATH=$PYTHONPATH:$(pwd)
+           python src/generator.py
