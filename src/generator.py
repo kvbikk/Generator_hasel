@@ -58,4 +58,3 @@ if __name__ == "__main__":
         okno.mainloop()
     except tkinter.TclError:
         print("Błąd ekranu")
-        
