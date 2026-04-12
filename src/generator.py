@@ -35,7 +35,6 @@ if __name__ == "__main__":
     haslo_label = tkinter.Label(okno, text="",)
     haslo_label.pack()
 
-
     def generuj():
         dlugosc = int(dlugosc_entry.get())
         nowe_haslo = generator_hasel(
@@ -44,9 +43,7 @@ if __name__ == "__main__":
             uzyj_specjalnych=uzyj_specjalnych_var.get())
         haslo_label.config(text=nowe_haslo)
 
-
     moja_dlugosc = 15
-
 
     if moja_dlugosc is None:
         nowe_haslo = generator_hasel()
