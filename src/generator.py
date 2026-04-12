@@ -37,7 +37,10 @@ haslo_label.pack()
 
 def generuj():
     dlugosc = int(dlugosc_entry.get())
-    nowe_haslo = generator_hasel(dlugosc_hasla=dlugosc, uzyj_cyfr=uzyj_cyfr_var.get(), uzyj_specjalnych=uzyj_specjalnych_var.get())
+    nowe_haslo = generator_hasel(
+        dlugosc_hasla=dlugosc,
+        uzyj_cyfr=uzyj_cyfr_var.get(),
+        uzyj_specjalnych=uzyj_specjalnych_var.get())
     haslo_label.config(text=nowe_haslo)
 
 
