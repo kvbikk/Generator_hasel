@@ -16,23 +16,23 @@ def generator_hasel(dlugosc_hasla=10, uzyj_cyfr=True, uzyj_specjalnych=True):
         haslo += losowy_znak
     return haslo
 
+if __name__ == "__main__":
+    okno = tkinter.Tk()
+    okno.title("Generator hasła")
+    okno.geometry("300x300")
 
-okno = tkinter.Tk()
-okno.title("Generator hasła")
-okno.geometry("300x300")
+    tkinter.Label(okno, text="Długość hasła:").pack()
+    dlugosc_entry = tkinter.Entry(okno)
+    dlugosc_entry.pack()
 
-tkinter.Label(okno, text="Długość hasła:").pack()
-dlugosc_entry = tkinter.Entry(okno)
-dlugosc_entry.pack()
+    uzyj_cyfr_var = tkinter.BooleanVar(value=False)
+    tkinter.Checkbutton(okno, text="Użyj cyfr", variable=uzyj_cyfr_var).pack()
 
-uzyj_cyfr_var = tkinter.BooleanVar(value=False)
-tkinter.Checkbutton(okno, text="Użyj cyfr", variable=uzyj_cyfr_var).pack()
+    uzyj_specjalnych_var = tkinter.BooleanVar(value=False)
+    tkinter.Checkbutton(okno, text="Użyj specjalnych", variable=uzyj_specjalnych_var).pack()
 
-uzyj_specjalnych_var = tkinter.BooleanVar(value=False)
-tkinter.Checkbutton(okno, text="Użyj specjalnych", variable=uzyj_specjalnych_var).pack()
-
-haslo_label = tkinter.Label(okno, text="",)
-haslo_label.pack()
+    haslo_label = tkinter.Label(okno, text="",)
+    haslo_label.pack()
 
 
 def generuj():
