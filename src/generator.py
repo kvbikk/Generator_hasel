@@ -16,27 +16,31 @@ def generator_hasel(dlugosc_hasla=10, uzyj_cyfr=True, uzyj_specjalnych=True):
         haslo += losowy_znak
     return haslo
 
+
 okno = tkinter.Tk()
 okno.title("Generator hasła")
 okno.geometry("300x300")
 
-tkinter.Label(okno, text="Długość hasła:").pack()
-dlugosc_entry=tkinter.Entry(okno)
+tkinter.Label(okno, text = "Długość hasła:").pack()
+dlugosc_entry = tkinter.Entry(okno)
 dlugosc_entry.pack()
 
-uzyj_cyfr_var =tkinter.BooleanVar(value=False)
-tkinter.Checkbutton(okno, text="Użyj cyfr", variable=uzyj_cyfr_var).pack()
+uzyj_cyfr_var = tkinter.BooleanVar(value = False)
+tkinter.Checkbutton(okno, text = "Użyj cyfr", variable = uzyj_cyfr_var).pack()
 
 uzyj_specjalnych_var = tkinter.BooleanVar(value=False)
-tkinter.Checkbutton(okno, text="Użyj specjalnych",variable=uzyj_specjalnych_var).pack()
+tkinter.Checkbutton(okno, text = "Użyj specjalnych", variable = uzyj_specjalnych_var).pack()
 
 haslo_label = tkinter.Label(okno, text="",)
 haslo_label.pack()
 
+
 def generuj():
     dlugosc = int(dlugosc_entry.get())
-    nowe_haslo= generator_hasel(dlugosc_hasla=dlugosc, uzyj_cyfr=uzyj_cyfr_var.get(), uzyj_specjalnych=uzyj_specjalnych_var.get())
+    nowe_haslo = generator_hasel(dlugosc_hasla=dlugosc,uzyj_cyfr=uzyj_cyfr_var.get(), 
+                                uzyj_specjalnych=uzyj_specjalnych_var.get())
     haslo_label.config(text=nowe_haslo)
+
 
 moja_dlugosc = 15
 
