@@ -36,25 +36,25 @@ if __name__ == "__main__":
     haslo_label.pack()
 
 
-def generuj():
-    dlugosc = int(dlugosc_entry.get())
-    nowe_haslo = generator_hasel(
-        dlugosc_hasla=dlugosc,
-        uzyj_cyfr=uzyj_cyfr_var.get(),
-        uzyj_specjalnych=uzyj_specjalnych_var.get())
-    haslo_label.config(text=nowe_haslo)
+    def generuj():
+        dlugosc = int(dlugosc_entry.get())
+        nowe_haslo = generator_hasel(
+            dlugosc_hasla=dlugosc,
+            uzyj_cyfr=uzyj_cyfr_var.get(),
+            uzyj_specjalnych=uzyj_specjalnych_var.get())
+        haslo_label.config(text=nowe_haslo)
 
 
-moja_dlugosc = 15
+    moja_dlugosc = 15
 
 
-if moja_dlugosc is None:
-    nowe_haslo = generator_hasel()
-else:
-    nowe_haslo = generator_hasel(dlugosc_hasla=moja_dlugosc)
+    if moja_dlugosc is None:
+        nowe_haslo = generator_hasel()
+    else:
+        nowe_haslo = generator_hasel(dlugosc_hasla=moja_dlugosc)
 
-print(f"Hasło składa się z: {len(nowe_haslo)} znaków")
-print(f"Twoje nowe hasło to: {nowe_haslo}")
+    print(f"Hasło składa się z: {len(nowe_haslo)} znaków")
+    print(f"Twoje nowe hasło to: {nowe_haslo}")
 
-tkinter.Button(okno, text="Generuj", command=generuj).pack()
-okno.mainloop()
+    tkinter.Button(okno, text="Generuj", command=generuj).pack()
+    okno.mainloop()
