@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
         tkinter.Label(okno, text="Długość hasła:").pack()
         dlugosc_entry = tkinter.Entry(okno)
-        dlugosc_entry.insert(0,"10")
+        dlugosc_entry.insert(0, "10")
         dlugosc_entry.pack()
 
         uzyj_cyfr_var = tkinter.BooleanVar(value=False)
@@ -36,6 +36,7 @@ if __name__ == "__main__":
 
         haslo_label = tkinter.Label(okno, text="",)
         haslo_label.pack()
+        
         def zmiana(v):
             dlugosc_entry.delete(0, tkinter.END)
             dlugosc_entry.insert(0, str(int(float(v))))
@@ -50,7 +51,7 @@ if __name__ == "__main__":
                 dlugosc_hasla=dlugosc,
                 uzyj_cyfr=uzyj_cyfr_var.get(),
                 uzyj_specjalnych=uzyj_specjalnych_var.get())
-            haslo_label.config(text=nowe_haslo, font=("Verdana",20))
+            haslo_label.config(text=nowe_haslo, font=("Verdana", 20))
 
         moja_dlugosc = 15
 
