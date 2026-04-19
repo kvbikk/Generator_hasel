@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
         haslo_label = tkinter.Label(okno, text="",)
         haslo_label.pack()
-        
+
         def zmiana(v):
             dlugosc_entry.delete(0, tkinter.END)
             dlugosc_entry.insert(0, str(int(float(v))))
