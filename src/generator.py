@@ -40,23 +40,61 @@ if __name__ == "__main__":
     try:
         okno = tk.Tk()
         okno.title("Generator hasła")
-        okno.geometry("360x480")
+        okno.geometry("420x480")
         okno.resizable(False, False)
 
         style = ttk.Style()
         style.theme_use("clam")
 
-        # --- STYLE PASKA ---
-        style.configure("red.Horizontal.TProgressbar", troughcolor="#eee", background="red")
-        style.configure("orange.Horizontal.TProgressbar", troughcolor="#eee", background="orange")
-        style.configure("green.Horizontal.TProgressbar", troughcolor="#eee", background="green")
+        style.configure("red.Horizontal.TProgressbar", background="red")
+        style.configure("orange.Horizontal.TProgressbar", background="orange")
+        style.configure("green.Horizontal.TProgressbar", background="green")
 
+        historia = []
+
+        # --- stan menu (POPRAWKA zamiast nonlocal) ---
+        panel_otwarty = tk.BooleanVar(value=False)
+
+        # --- GŁÓWNY FRAME ---
         main = ttk.Frame(okno, padding=15)
         main.pack(fill="both", expand=True)
 
-        ttk.Label(main, text="🔐 Generator hasła", font=("Segoe UI", 14, "bold")).pack(pady=10)
+        # --- MENU ☰ ---
+        def toggle_historia():
+            panel_otwarty.set(not panel_otwarty.get())
 
-        # --- USTAWIENIA ---
+            if panel_otwarty.get():
+                historia_frame.place(x=0, y=40, width=200, height=400)
+                odswiez_historie()
+            else:
+                historia_frame.place_forget()
+
+        ttk.Button(okno, text="Historia", width=7, command=toggle_historia).place(x=5, y=5)
+
+        # --- PANEL HISTORII ---
+        historia_frame = tk.Frame(okno, bg="#f0f0f0", bd=2, relief="raised")
+
+        listbox = tk.Listbox(historia_frame)
+        listbox.pack(fill="both", expand=True)
+
+        def odswiez_historie():
+            listbox.delete(0, tk.END)
+            for h in historia:
+                listbox.insert(tk.END, h)
+
+        def kopiuj_z_listy(event):
+            sel = listbox.curselection()
+            if sel:
+                haslo = listbox.get(sel[0])
+                okno.clipboard_clear()
+                okno.clipboard_append(haslo)
+                okno.update()
+
+        listbox.bind("<<ListboxSelect>>", kopiuj_z_listy)
+
+        # --- UI ---
+        ttk.Label(main, text="Generator hasła", font=("Segoe UI", 14, "bold")).pack(pady=10)
+
         settings = ttk.LabelFrame(main, text="Ustawienia", padding=10)
         settings.pack(fill="x")
 
@@ -67,10 +105,10 @@ if __name__ == "__main__":
         dlugosc_entry.grid(row=0, column=1)
 
         uzyj_cyfr_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(settings, text="Cyfry", variable=uzyj_cyfr_var).grid(row=1, column=0, sticky="w")
+        ttk.Checkbutton(settings, text="Cyfry", variable=uzyj_cyfr_var).grid(row=1, column=0)
 
         uzyj_specjalnych_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(settings, text="Znaki specjalne", variable=uzyj_specjalnych_var).grid(row=1, column=1, sticky="w")
+        ttk.Checkbutton(settings, text="Specjalne", variable=uzyj_specjalnych_var).grid(row=1, column=1)
 
         def zmiana(v):
             dlugosc_entry.delete(0, tk.END)
@@ -78,7 +116,7 @@ if __name__ == "__main__":
 
         slider = ttk.Scale(settings, from_=4, to=32, orient="horizontal", command=zmiana)
         slider.set(10)
-        slider.grid(row=2, column=0, columnspan=2, sticky="ew", pady=5)
+        slider.grid(row=2, column=0, columnspan=2, sticky="ew")
 
         def aktualizuj_slider(event):
             try:
@@ -98,18 +136,21 @@ if __name__ == "__main__":
 
         haslo_var = tk.StringVar(value="Kliknij Generuj")
 
-        haslo_entry = ttk.Entry(output, textvariable=haslo_var, font=("Consolas", 12), justify="center")
-        haslo_entry.pack(fill="x")
+        ttk.Entry(output, textvariable=haslo_var, font=("Consolas", 12), justify="center").pack(fill="x")
 
-        sila_label = ttk.Label(output, text="", font=("Segoe UI", 10))
+        sila_label = ttk.Label(output, text="")
         sila_label.pack(pady=5)
 
-        # --- PASEK ---
         progress = ttk.Progressbar(output, length=250, mode="determinate", maximum=100)
         progress.pack(pady=5)
 
         status_label = ttk.Label(main, text="")
         status_label.pack()
+
+        def dodaj_do_historii(haslo):
+            historia.insert(0, haslo)
+            if len(historia) > 10:
+                historia.pop()
 
         # --- FUNKCJE ---
         def generuj():
@@ -129,13 +170,17 @@ if __name__ == "__main__":
                 sila_label.config(text=f"Siła hasła: {sila}", foreground=kolor)
                 progress["value"] = wartosc
 
-                # --- zmiana koloru paska ---
                 if kolor == "red":
                     progress.config(style="red.Horizontal.TProgressbar")
                 elif kolor == "orange":
                     progress.config(style="orange.Horizontal.TProgressbar")
                 else:
                     progress.config(style="green.Horizontal.TProgressbar")
+
+                dodaj_do_historii(haslo)
+
+                if panel_otwarty.get():
+                    odswiez_historie()
 
                 status_label.config(text="")
 
