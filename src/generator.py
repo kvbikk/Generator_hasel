@@ -202,6 +202,6 @@ try:
     if __name__ == "__main__":
         app = App()
         app.okno.mainloop()
-except tkinter.TclError:
-    print("Brak środowiska graficznego")
 
+except TclError:
+    print("Brak środowiska graficznego")
