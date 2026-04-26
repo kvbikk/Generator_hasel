@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 from src.logika import generator_hasel, ocena_sily_hasla
+from tkinter import TclError
 
 
 KOLORY = {
@@ -197,6 +198,7 @@ class App:
                 ramka, text="Kopiuj", width=50, height=24, fg_color=KOLORY["surf2"],
                 hover_color=KOLORY["border"], text_color=KOLORY["text"], command=kopiuj_z_historii
             ).pack(side="right", padx=10)
+            
 
 try:
     if __name__ == "__main__":
