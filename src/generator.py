@@ -3,9 +3,10 @@ import string
 import tkinter as tk
 import customtkinter as ctk
 
+
 def generator_hasel(dlugosc_hasla=10, uzyj_cyfr=True, uzyj_specjalnych=True, uzyj_duzych=True):
     znaki = string.ascii_lowercase
-    
+
     if uzyj_duzych:
         znaki += string.ascii_uppercase
     if uzyj_cyfr:
@@ -16,6 +17,7 @@ def generator_hasel(dlugosc_hasla=10, uzyj_cyfr=True, uzyj_specjalnych=True, uzy
         znaki = string.ascii_lowercase
 
     return "".join(random.choice(znaki) for _ in range(dlugosc_hasla))
+
 
 def ocena_sily_hasla(haslo):
     sila = 0
@@ -35,17 +37,19 @@ def ocena_sily_hasla(haslo):
         return "Średnie", 66, "orange"
     else:
         return "Mocne", 100, "green"
-    
+
+
 KOLORY = {
     "surface":  ("#EBEBEB", "#161920"),
     "border":   ("#D4D4D4", "#2a2f3f"),
-    "accent":   ("#77CF65", "#00e5a0"), 
+    "accent":   ("#77CF65", "#00e5a0"),
     "hover":    ("#77CF65", "#00ffb2"),
     "text":     ("#1A1A1A", "#e8eaf2"),
     "muted":    ("#666666", "#5a607a"),
     "surf2":    ("#D9D9D9", "#1e2230"),
     "btn_text": ("#FFFFFF", "#0d0f14"),
 }
+
 
 class App:
     def __init__(self):
@@ -70,23 +74,27 @@ class App:
         # Nagłówek i tryb
         nagl = ctk.CTkFrame(self.okno, fg_color=KOLORY["surface"], corner_radius=16)
         nagl.pack(fill="x", padx=20, pady=(20, 10))
-        
+
         self.switch = ctk.CTkSwitch(nagl, text="Tryb", command=self.zmien_tryb, width=50)
         self.switch.select()
         self.switch.pack(side="right", padx=15, pady=10)
-        
-        ctk.CTkLabel(nagl, text="Generator Haseł", font=("Segoe UI", 17, "bold"), text_color=KOLORY["text"]).pack(side="left", padx=15, pady=10)
+
+        ctk.CTkLabel(
+            nagl, text="Generator Haseł", font=("Segoe UI", 17, "bold"), text_color=KOLORY["text"]
+        ).pack(side="left", padx=15, pady=10)
 
         # Pole wyniku
-        haslo_frame = ctk.CTkFrame(self.okno, fg_color=KOLORY["surface"], corner_radius=14, border_width=1, border_color=KOLORY["border"])
+        haslo_frame = ctk.CTkFrame(
+            self.okno, fg_color=KOLORY["surface"], corner_radius=14, border_width=1, border_color=KOLORY["border"]
+        )
         haslo_frame.pack(fill="x", padx=20, pady=10)
 
         self.wynik_entry = ctk.CTkEntry(
-            haslo_frame, 
-            font=("Consolas", 18), 
-            fg_color="transparent", 
+            haslo_frame,
+            font=("Consolas", 18),
+            fg_color="transparent",
             text_color=KOLORY["text"],
-            border_width=0, 
+            border_width=0,
             justify="center"
         )
         self.wynik_entry.pack(fill="x", padx=10, pady=(15, 5))
@@ -102,13 +110,15 @@ class App:
         # Slider Długości
         slider_label_frame = ctk.CTkFrame(self.okno, fg_color="transparent")
         slider_label_frame.pack(fill="x", padx=30, pady=(10, 0))
-        
+
         ctk.CTkLabel(slider_label_frame, text="Długość hasła:", font=("Segoe UI", 12), text_color=KOLORY["text"]).pack(side="left")
-        self.wartosc_label = ctk.CTkLabel(slider_label_frame, text="12", font=("Segoe UI", 13, "bold"), text_color=KOLORY["accent"])
+        self.wartosc_label = ctk.CTkLabel(
+            slider_label_frame, text="12", font=("Segoe UI", 13, "bold"), text_color=KOLORY["accent"]
+        )
         self.wartosc_label.pack(side="right")
 
         self.dlugosc_slider = ctk.CTkSlider(
-            self.okno, from_=4, to=32, number_of_steps=28, 
+            self.okno, from_=4, to=32, number_of_steps=28,
             command=self.slider_event, button_color=KOLORY["accent"], progress_color=KOLORY["accent"]
         )
         self.dlugosc_slider.set(12)
@@ -118,19 +128,20 @@ class App:
         self.uzyj_duzych_var = ctk.BooleanVar(value=True)
         self.uzyj_cyfr_var = ctk.BooleanVar(value=True)
         self.uzyj_specjalnych_var = ctk.BooleanVar(value=True)
-        
+
         check_frame = ctk.CTkFrame(self.okno, fg_color="transparent")
         check_frame.pack(pady=5)
-        
-        ctk.CTkCheckBox(check_frame, text="Duże litery", text_color=KOLORY["text"], variable=self.uzyj_duzych_var, fg_color=KOLORY["accent"], hover_color=KOLORY["hover"]).pack(side="left", padx=8)
-        ctk.CTkCheckBox(check_frame, text="Cyfry", text_color=KOLORY["text"], variable=self.uzyj_cyfr_var, fg_color=KOLORY["accent"], hover_color=KOLORY["hover"]).pack(side="left", padx=8)
-        ctk.CTkCheckBox(check_frame, text="Symbole", text_color=KOLORY["text"], variable=self.uzyj_specjalnych_var, fg_color=KOLORY["accent"], hover_color=KOLORY["hover"]).pack(side="left", padx=8)
+
+        params = {"text_color": KOLORY["text"], "fg_color": KOLORY["accent"], "hover_color": KOLORY["hover"]}
+        ctk.CTkCheckBox(check_frame, text="Duże litery", variable=self.uzyj_duzych_var, **params).pack(side="left", padx=8)
+        ctk.CTkCheckBox(check_frame, text="Cyfry", variable=self.uzyj_cyfr_var, **params).pack(side="left", padx=8)
+        ctk.CTkCheckBox(check_frame, text="Symbole", variable=self.uzyj_specjalnych_var, **params).pack(side="left", padx=8)
 
         # Pasek siły
         self.sila_bar = ctk.CTkProgressBar(self.okno)
         self.sila_bar.set(0)
         self.sila_bar.pack(fill="x", padx=40, pady=(15, 0))
-        
+
         self.sila_label = ctk.CTkLabel(self.okno, text="Siła: -", font=("Segoe UI", 11), text_color=KOLORY["text"])
         self.sila_label.pack()
 
@@ -167,12 +178,12 @@ class App:
         self.biezace_haslo = haslo
 
         self.historia.insert(0, haslo)
-        if len(self.historia) > 15: 
+        if len(self.historia) > 15:
             self.historia.pop()
 
         self.wynik_entry.delete(0, tk.END)
         self.wynik_entry.insert(0, haslo)
-        
+
         napis, proc, kolor = ocena_sily_hasla(haslo)
         self.sila_bar.set(proc/100)
         self.sila_bar.configure(progress_color=kolor)
@@ -181,7 +192,7 @@ class App:
     def kopiuj(self):
         if not self.biezace_haslo:
             return
-        
+
         self.okno.clipboard_clear()
         self.okno.clipboard_append(self.biezace_haslo)
         self.okno.update()
@@ -195,7 +206,9 @@ class App:
         okno_hist.geometry("300x400")
         okno_hist.transient(self.okno)
 
-        ctk.CTkLabel(okno_hist, text="Ostatnie hasła", font=("Segoe UI", 16, "bold"), text_color=KOLORY["text"]).pack(pady=10)
+        ctk.CTkLabel(
+            okno_hist, text="Ostatnie hasła", font=("Segoe UI", 16, "bold"), text_color=KOLORY["text"]
+        ).pack(pady=10)
 
         scroll = ctk.CTkScrollableFrame(okno_hist, fg_color="transparent")
         scroll.pack(fill="both", expand=True, padx=10, pady=10)
@@ -216,8 +229,11 @@ class App:
                 self.okno.clipboard_append(h)
                 self.okno.update()
 
-            btn = ctk.CTkButton(ramka, text="Kopiuj", width=50, height=24, fg_color=KOLORY["surf2"], hover_color=KOLORY["border"], text_color=KOLORY["text"], command=kopiuj_z_historii)
-            btn.pack(side="right", padx=10)
+            ctk.CTkButton(
+                ramka, text="Kopiuj", width=50, height=24, fg_color=KOLORY["surf2"],
+                hover_color=KOLORY["border"], text_color=KOLORY["text"], command=kopiuj_z_historii
+            ).pack(side="right", padx=10)
+
 
 if __name__ == "__main__":
     app = App()
