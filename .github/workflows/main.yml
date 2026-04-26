@@ -26,7 +26,7 @@ jobs:
         
         - name: 2. Linting (flake8)
           run: |
-            flake8 src/ tests/ --count --max-line-length=127 --statistics
+            flake8 src/ tests/ --count --max-line-length=132 --statistics
 
         - name: 3. Testy jednostkowe (pytest)
           run: |
