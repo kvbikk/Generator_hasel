@@ -1,4 +1,5 @@
 import string
+import pytest
 from src.generator import generator_hasel
 from src.logika import generator_hasel
 
