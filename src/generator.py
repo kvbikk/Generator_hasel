@@ -1,22 +1,24 @@
 import random
 import string
 import tkinter as tk
-from tkinter import ttk
+import customtkinter as ctk
 
-
-def generator_hasel(dlugosc_hasla=10, uzyj_cyfr=True, uzyj_specjalnych=True):
-    znaki = string.ascii_letters
+def generator_hasel(dlugosc_hasla=10, uzyj_cyfr=True, uzyj_specjalnych=True, uzyj_duzych=True):
+    znaki = string.ascii_lowercase
+    
+    if uzyj_duzych:
+        znaki += string.ascii_uppercase
     if uzyj_cyfr:
         znaki += string.digits
     if uzyj_specjalnych:
         znaki += string.punctuation
+    if not znaki:
+        znaki = string.ascii_lowercase
 
     return "".join(random.choice(znaki) for _ in range(dlugosc_hasla))
 
-
 def ocena_sily_hasla(haslo):
     sila = 0
-
     if len(haslo) >= 8:
         sila += 1
     if len(haslo) >= 12:
@@ -27,183 +29,196 @@ def ocena_sily_hasla(haslo):
         sila += 1
     if any(c.islower() for c in haslo) and any(c.isupper() for c in haslo):
         sila += 1
-
     if sila <= 2:
         return "Słabe", 33, "red"
     elif sila == 3:
         return "Średnie", 66, "orange"
     else:
         return "Mocne", 100, "green"
+    
+KOLORY = {
+    "surface":  ("#EBEBEB", "#161920"),
+    "border":   ("#D4D4D4", "#2a2f3f"),
+    "accent":   ("#77CF65", "#00e5a0"), 
+    "hover":    ("#77CF65", "#00ffb2"),
+    "text":     ("#1A1A1A", "#e8eaf2"),
+    "muted":    ("#666666", "#5a607a"),
+    "surf2":    ("#D9D9D9", "#1e2230"),
+    "btn_text": ("#FFFFFF", "#0d0f14"),
+}
 
+class App:
+    def __init__(self):
+        self.okno = ctk.CTk()
+        ctk.set_appearance_mode("dark")
+        self.okno.title("Generator hasła")
+        self.okno.geometry("440x550")
+        self.okno.resizable(False, False)
+
+        self.biezace_haslo = ""
+        self.historia = []
+
+        self.ui()
+
+    def zmien_tryb(self):
+        if self.switch.get() == 1:
+            ctk.set_appearance_mode("dark")
+        else:
+            ctk.set_appearance_mode("light")
+
+    def ui(self):
+        # Nagłówek i tryb
+        nagl = ctk.CTkFrame(self.okno, fg_color=KOLORY["surface"], corner_radius=16)
+        nagl.pack(fill="x", padx=20, pady=(20, 10))
+        
+        self.switch = ctk.CTkSwitch(nagl, text="Tryb", command=self.zmien_tryb, width=50)
+        self.switch.select()
+        self.switch.pack(side="right", padx=15, pady=10)
+        
+        ctk.CTkLabel(nagl, text="Generator Haseł", font=("Segoe UI", 17, "bold"), text_color=KOLORY["text"]).pack(side="left", padx=15, pady=10)
+
+        # Pole wyniku
+        haslo_frame = ctk.CTkFrame(self.okno, fg_color=KOLORY["surface"], corner_radius=14, border_width=1, border_color=KOLORY["border"])
+        haslo_frame.pack(fill="x", padx=20, pady=10)
+
+        self.wynik_entry = ctk.CTkEntry(
+            haslo_frame, 
+            font=("Consolas", 18), 
+            fg_color="transparent", 
+            text_color=KOLORY["text"],
+            border_width=0, 
+            justify="center"
+        )
+        self.wynik_entry.pack(fill="x", padx=10, pady=(15, 5))
+        self.wynik_entry.insert(0, "Kliknij Generuj")
+
+        self.kopiuj_btn = ctk.CTkButton(
+            haslo_frame, text="Kopiuj", fg_color=KOLORY["surf2"], hover_color=KOLORY["border"],
+            text_color=KOLORY["text"], border_width=1, border_color=KOLORY["border"],
+            corner_radius=8, command=self.kopiuj
+        )
+        self.kopiuj_btn.pack(pady=(5, 15))
+
+        # Slider Długości
+        slider_label_frame = ctk.CTkFrame(self.okno, fg_color="transparent")
+        slider_label_frame.pack(fill="x", padx=30, pady=(10, 0))
+        
+        ctk.CTkLabel(slider_label_frame, text="Długość hasła:", font=("Segoe UI", 12), text_color=KOLORY["text"]).pack(side="left")
+        self.wartosc_label = ctk.CTkLabel(slider_label_frame, text="12", font=("Segoe UI", 13, "bold"), text_color=KOLORY["accent"])
+        self.wartosc_label.pack(side="right")
+
+        self.dlugosc_slider = ctk.CTkSlider(
+            self.okno, from_=4, to=32, number_of_steps=28, 
+            command=self.slider_event, button_color=KOLORY["accent"], progress_color=KOLORY["accent"]
+        )
+        self.dlugosc_slider.set(12)
+        self.dlugosc_slider.pack(fill="x", padx=30, pady=10)
+
+        # Checkboxy
+        self.uzyj_duzych_var = ctk.BooleanVar(value=True)
+        self.uzyj_cyfr_var = ctk.BooleanVar(value=True)
+        self.uzyj_specjalnych_var = ctk.BooleanVar(value=True)
+        
+        check_frame = ctk.CTkFrame(self.okno, fg_color="transparent")
+        check_frame.pack(pady=5)
+        
+        ctk.CTkCheckBox(check_frame, text="Duże litery", text_color=KOLORY["text"], variable=self.uzyj_duzych_var, fg_color=KOLORY["accent"], hover_color=KOLORY["hover"]).pack(side="left", padx=8)
+        ctk.CTkCheckBox(check_frame, text="Cyfry", text_color=KOLORY["text"], variable=self.uzyj_cyfr_var, fg_color=KOLORY["accent"], hover_color=KOLORY["hover"]).pack(side="left", padx=8)
+        ctk.CTkCheckBox(check_frame, text="Symbole", text_color=KOLORY["text"], variable=self.uzyj_specjalnych_var, fg_color=KOLORY["accent"], hover_color=KOLORY["hover"]).pack(side="left", padx=8)
+
+        # Pasek siły
+        self.sila_bar = ctk.CTkProgressBar(self.okno)
+        self.sila_bar.set(0)
+        self.sila_bar.pack(fill="x", padx=40, pady=(15, 0))
+        
+        self.sila_label = ctk.CTkLabel(self.okno, text="Siła: -", font=("Segoe UI", 11), text_color=KOLORY["text"])
+        self.sila_label.pack()
+
+        # Przyciski
+        btn_row = ctk.CTkFrame(self.okno, fg_color="transparent")
+        btn_row.pack(fill="x", padx=40, pady=(15, 20))
+
+        self.hist_btn = ctk.CTkButton(
+            btn_row, text="🕘 Historia", width=100, height=45,
+            fg_color=KOLORY["surf2"], hover_color=KOLORY["border"], text_color=KOLORY["text"],
+            border_width=1, border_color=KOLORY["border"], corner_radius=12,
+            command=self.pokaz_historie
+        )
+        self.hist_btn.pack(side="left", padx=(0, 10))
+
+        self.gen_btn = ctk.CTkButton(
+            btn_row, text=" Generuj", height=45, command=self.generuj,
+            fg_color=KOLORY["accent"], hover_color=KOLORY["hover"], text_color=KOLORY["btn_text"],
+            font=("Segoe UI", 14, "bold"), corner_radius=12
+        )
+        self.gen_btn.pack(side="left", fill="x", expand=True)
+
+    def slider_event(self, value):
+        self.wartosc_label.configure(text=str(int(value)))
+
+    def generuj(self):
+        dlugosc = int(self.dlugosc_slider.get())
+        haslo = generator_hasel(
+            dlugosc_hasla=dlugosc,
+            uzyj_duzych=self.uzyj_duzych_var.get(),
+            uzyj_cyfr=self.uzyj_cyfr_var.get(),
+            uzyj_specjalnych=self.uzyj_specjalnych_var.get()
+        )
+        self.biezace_haslo = haslo
+
+        self.historia.insert(0, haslo)
+        if len(self.historia) > 15: 
+            self.historia.pop()
+
+        self.wynik_entry.delete(0, tk.END)
+        self.wynik_entry.insert(0, haslo)
+        
+        napis, proc, kolor = ocena_sily_hasla(haslo)
+        self.sila_bar.set(proc/100)
+        self.sila_bar.configure(progress_color=kolor)
+        self.sila_label.configure(text=f"Siła: {napis}", text_color=kolor)
+
+    def kopiuj(self):
+        if not self.biezace_haslo:
+            return
+        
+        self.okno.clipboard_clear()
+        self.okno.clipboard_append(self.biezace_haslo)
+        self.okno.update()
+
+        self.kopiuj_btn.configure(text="✔ Skopiowano!", text_color=KOLORY["accent"])
+        self.okno.after(1500, lambda: self.kopiuj_btn.configure(text="Kopiuj", text_color=KOLORY["text"]))
+
+    def pokaz_historie(self):
+        okno_hist = ctk.CTkToplevel(self.okno)
+        okno_hist.title("Historia")
+        okno_hist.geometry("300x400")
+        okno_hist.transient(self.okno)
+
+        ctk.CTkLabel(okno_hist, text="Ostatnie hasła", font=("Segoe UI", 16, "bold"), text_color=KOLORY["text"]).pack(pady=10)
+
+        scroll = ctk.CTkScrollableFrame(okno_hist, fg_color="transparent")
+        scroll.pack(fill="both", expand=True, padx=10, pady=10)
+
+        if not self.historia:
+            ctk.CTkLabel(scroll, text="Brak wygenerowanych haseł.", text_color=KOLORY["muted"]).pack(pady=20)
+            return
+
+        for haslo in self.historia:
+            ramka = ctk.CTkFrame(scroll, fg_color=KOLORY["surface"], corner_radius=8)
+            ramka.pack(fill="x", pady=4)
+
+            lbl = ctk.CTkLabel(ramka, text=haslo, font=("Consolas", 13), text_color=KOLORY["text"])
+            lbl.pack(side="left", padx=10, pady=8)
+
+            def kopiuj_z_historii(h=haslo):
+                self.okno.clipboard_clear()
+                self.okno.clipboard_append(h)
+                self.okno.update()
+
+            btn = ctk.CTkButton(ramka, text="Kopiuj", width=50, height=24, fg_color=KOLORY["surf2"], hover_color=KOLORY["border"], text_color=KOLORY["text"], command=kopiuj_z_historii)
+            btn.pack(side="right", padx=10)
 
 if __name__ == "__main__":
-    try:
-        okno = tk.Tk()
-        okno.title("Generator hasła")
-        okno.geometry("420x480")
-        okno.resizable(False, False)
-
-        style = ttk.Style()
-        style.theme_use("clam")
-
-        style.configure("red.Horizontal.TProgressbar", background="red")
-        style.configure("orange.Horizontal.TProgressbar", background="orange")
-        style.configure("green.Horizontal.TProgressbar", background="green")
-
-        historia = []
-
-        # --- stan menu (POPRAWKA zamiast nonlocal) ---
-        panel_otwarty = tk.BooleanVar(value=False)
-
-        # --- GŁÓWNY FRAME ---
-        main = ttk.Frame(okno, padding=15)
-        main.pack(fill="both", expand=True)
-
-        # --- MENU ☰ ---
-        def toggle_historia():
-            panel_otwarty.set(not panel_otwarty.get())
-
-            if panel_otwarty.get():
-                historia_frame.place(x=0, y=40, width=200, height=400)
-                odswiez_historie()
-            else:
-                historia_frame.place_forget()
-
-        ttk.Button(okno, text="Historia", width=7, command=toggle_historia).place(x=5, y=5)
-
-        # --- PANEL HISTORII ---
-        historia_frame = tk.Frame(okno, bg="#f0f0f0", bd=2, relief="raised")
-
-        listbox = tk.Listbox(historia_frame)
-        listbox.pack(fill="both", expand=True)
-
-        def odswiez_historie():
-            listbox.delete(0, tk.END)
-            for h in historia:
-                listbox.insert(tk.END, h)
-
-        def kopiuj_z_listy(event):
-            sel = listbox.curselection()
-            if sel:
-                haslo = listbox.get(sel[0])
-                okno.clipboard_clear()
-                okno.clipboard_append(haslo)
-                okno.update()
-
-        listbox.bind("<<ListboxSelect>>", kopiuj_z_listy)
-
-        # --- UI ---
-        ttk.Label(main, text="Generator hasła", font=("Segoe UI", 14, "bold")).pack(pady=10)
-
-        settings = ttk.LabelFrame(main, text="Ustawienia", padding=10)
-        settings.pack(fill="x")
-
-        ttk.Label(settings, text="Długość:").grid(row=0, column=0)
-
-        dlugosc_entry = ttk.Entry(settings, width=5, justify="center")
-        dlugosc_entry.insert(0, "10")
-        dlugosc_entry.grid(row=0, column=1)
-
-        uzyj_cyfr_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(settings, text="Cyfry", variable=uzyj_cyfr_var).grid(row=1, column=0)
-
-        uzyj_specjalnych_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(settings, text="Specjalne", variable=uzyj_specjalnych_var).grid(row=1, column=1)
-
-        def zmiana(v):
-            dlugosc_entry.delete(0, tk.END)
-            dlugosc_entry.insert(0, str(int(float(v))))
-
-        slider = ttk.Scale(settings, from_=4, to=32, orient="horizontal", command=zmiana)
-        slider.set(10)
-        slider.grid(row=2, column=0, columnspan=2, sticky="ew")
-
-        def aktualizuj_slider(event):
-            try:
-                w = int(dlugosc_entry.get())
-                w = max(4, min(32, w))
-                slider.set(w)
-                dlugosc_entry.delete(0, tk.END)
-                dlugosc_entry.insert(0, str(w))
-            except ValueError:
-                pass
-
-        dlugosc_entry.bind("<KeyRelease>", aktualizuj_slider)
-
-        # --- HASŁO ---
-        output = ttk.LabelFrame(main, text="Hasło", padding=10)
-        output.pack(fill="x", pady=10)
-
-        haslo_var = tk.StringVar(value="Kliknij Generuj")
-
-        ttk.Entry(output, textvariable=haslo_var, font=("Consolas", 12), justify="center").pack(fill="x")
-
-        sila_label = ttk.Label(output, text="")
-        sila_label.pack(pady=5)
-
-        progress = ttk.Progressbar(output, length=250, mode="determinate", maximum=100)
-        progress.pack(pady=5)
-
-        status_label = ttk.Label(main, text="")
-        status_label.pack()
-
-        def dodaj_do_historii(haslo):
-            historia.insert(0, haslo)
-            if len(historia) > 10:
-                historia.pop()
-
-        # --- FUNKCJE ---
-        def generuj():
-            try:
-                dlugosc = int(dlugosc_entry.get())
-
-                haslo = generator_hasel(
-                    dlugosc_hasla=dlugosc,
-                    uzyj_cyfr=uzyj_cyfr_var.get(),
-                    uzyj_specjalnych=uzyj_specjalnych_var.get()
-                )
-
-                haslo_var.set(haslo)
-
-                sila, wartosc, kolor = ocena_sily_hasla(haslo)
-
-                sila_label.config(text=f"Siła hasła: {sila}", foreground=kolor)
-                progress["value"] = wartosc
-
-                if kolor == "red":
-                    progress.config(style="red.Horizontal.TProgressbar")
-                elif kolor == "orange":
-                    progress.config(style="orange.Horizontal.TProgressbar")
-                else:
-                    progress.config(style="green.Horizontal.TProgressbar")
-
-                dodaj_do_historii(haslo)
-
-                if panel_otwarty.get():
-                    odswiez_historie()
-
-                status_label.config(text="")
-
-            except ValueError:
-                status_label.config(text="❌ Błędna wartość")
-
-        def kopiuj_haslo():
-            haslo = haslo_var.get()
-            if haslo and haslo != "Kliknij Generuj":
-                okno.clipboard_clear()
-                okno.clipboard_append(haslo)
-                okno.update()
-
-                status_label.config(text="✔ Skopiowano!")
-                okno.after(1500, lambda: status_label.config(text=""))
-
-        btns = ttk.Frame(main)
-        btns.pack(pady=10)
-
-        ttk.Button(btns, text="Generuj", command=generuj).grid(row=0, column=0, padx=5)
-        ttk.Button(btns, text="Kopiuj", command=kopiuj_haslo).grid(row=0, column=1, padx=5)
-
-        okno.mainloop()
-
-    except tk.TclError:
-        print("Błąd ekranu")
+    app = App()
+    app.okno.mainloop()
