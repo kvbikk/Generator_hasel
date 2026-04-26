@@ -198,7 +198,10 @@ class App:
                 hover_color=KOLORY["border"], text_color=KOLORY["text"], command=kopiuj_z_historii
             ).pack(side="right", padx=10)
 
+try:
+    if __name__ == "__main__":
+        app = App()
+        app.okno.mainloop()
+except tkinter.TclError:
+    print("Brak środowiska graficznego")
 
-if __name__ == "__main__":
-    app = App()
-    app.okno.mainloop()
