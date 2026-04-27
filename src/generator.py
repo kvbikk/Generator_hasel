@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-from src.logika import generator_hasel, ocena_sily_hasla
+from logika import generator_hasel, ocena_sily_hasla
 from tkinter import TclError
 
 
