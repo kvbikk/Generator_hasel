@@ -146,7 +146,7 @@ class App:
         if len(self.historia) > 15:
             self.historia.pop()
 
-        self.wynik_entry.delete(0, tk.END)
+        self.wynik_entry.delete(0, ctk.END)
         self.wynik_entry.insert(0, haslo)
 
         napis, proc, kolor = ocena_sily_hasla(haslo)
